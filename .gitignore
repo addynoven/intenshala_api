@@ -1,0 +1,19 @@
+# Dependency directories
+node_modules
+
+# Environment variables file
+.env
+
+# Log files
+*.log
+
+# Compiled output
+dist
+build
+
+# macOS
+.DS_Store
+
+# Editor-specific files
+.vscode/
+*.swp
