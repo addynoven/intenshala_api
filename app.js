@@ -5,8 +5,9 @@ require("dotenv").config({ path: "./.env" });
 const express = require("express");
 const morgan = require("morgan");
 const routes = require("./routes/Index");
-const ErrorHandler = require("./utils/errorHandler");
+const ErrorHandler = require("./utils/ErrorHandler");
 const genetatedErrors = require("./Middlewares/errors");
+
 require("./models/database").connectDatabase();
 
 // Create Express app

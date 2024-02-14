@@ -13,6 +13,7 @@ const studentModel = new mongoose.Schema(
         },
         password: {
             type: String,
+            select: false,
             required: [true, "Password is required"],
             minlength: [8, "Password must be at least 8 characters long"],
             maxlength: [1024, "Password cannot exceed 1024 characters"],
@@ -23,9 +24,17 @@ const studentModel = new mongoose.Schema(
 );
 
 studentModel.pre("save", function () {
+    if (this.isModified("password")) {
+        return;
+    }
     let salt = bcrypt.genSaltSync(10);
     this.password = bcrypt.hashSync(this.password, salt);
 });
+
+studentModel.methods.comparePassword = function (password) {
+    // console.log(bcrypt.compareSync(password, this.password));
+    return bcrypt.compareSync(password, this.password);
+};
 
 const Students = mongoose.model("students", studentModel);
 

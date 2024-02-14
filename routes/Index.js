@@ -19,10 +19,10 @@ router.get("/", homePage);
 router.post("/student/signup", studentSignup);
 
 // POST /student/signin
-router.post("/student/signup", studentSignin);
+router.post("/student/signin", studentSignin);
 
-// POST /student/signout
-router.post("/student/signup", studentSignout);
+// GET /student/signout
+router.get("/student/signout", studentSignout);
 
 // Export router
 module.exports = router;

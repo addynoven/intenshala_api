@@ -1,5 +1,6 @@
 module.exports = (err, req, res, next) => {
     const statusCode = err.statusCode || 500;
+    console.log("hello", "line 3");
     if (
         err.name === "MongoServerError" &&
         err.message.includes("E11000 duplicate key")
