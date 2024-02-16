@@ -7,13 +7,18 @@ const {
     studentSignup,
     studentSignin,
     studentSignout,
+    currentUser,
 } = require("../controllers/indexControllers");
+const { isAuthenticated } = require("../Middlewares/auth");
 
 // Create router
 const router = express.Router();
 
 // GET /
 router.get("/", homePage);
+
+//POST /student/
+router.post("/student/", isAuthenticated, currentUser);
 
 // POST /student/signup
 router.post("/student/signup", studentSignup);
@@ -22,7 +27,7 @@ router.post("/student/signup", studentSignup);
 router.post("/student/signin", studentSignin);
 
 // GET /student/signout
-router.get("/student/signout", studentSignout);
+router.get("/student/signout", isAuthenticated, studentSignout);
 
 // Export router
 module.exports = router;
