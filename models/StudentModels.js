@@ -20,6 +20,10 @@ const studentModel = new mongoose.Schema(
             maxlength: [1024, "Password cannot exceed 1024 characters"],
             // match: [/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,1024}$/,"Password must contain at least one digit, one lowercase letter, one uppercase letter, one special character, and be between 8 and 1024 characters long",],
         },
+        resetPasswordToken: {
+            type: String,
+            default: "0",
+        },
     },
     { timestamps: true }
 );

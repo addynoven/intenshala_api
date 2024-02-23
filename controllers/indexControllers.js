@@ -2,6 +2,7 @@ const { catchAyncErrors } = require("../Middlewares/catchAyncErrors");
 const Students = require("../models/studentModels");
 const ErrorHandler = require("../utils/ErrorHandler");
 const { sendtoken } = require("../utils/SendToken");
+const { sendMail } = require("../utils/nodemailer");
 
 exports.homePage = catchAyncErrors(async (req, res, next) => {
     res.json({ message: "secure homepage" });
@@ -34,4 +35,40 @@ exports.studentSignin = catchAyncErrors(async (req, res, next) => {
 exports.studentSignout = catchAyncErrors(async (req, res, next) => {
     res.clearCookie("token");
     res.json({ message: "all done" });
+});
+
+exports.studentsendmail = catchAyncErrors(async (req, res, next) => {
+    const student = await Students.findOne({ email: req.body.email }).exec();
+    if (!student)
+        return next(
+            new ErrorHandler("student not found with this email address", 404)
+        );
+    const url = `${req.protocol}://${req.get("host")}/student/forget-link/${
+        student.id
+    }`;
+    student.resetPasswordToken = "1";
+    await student.save();
+    console.log(url);
+    sendMail(req, res, next, url);
+    // res.json({ student, url });
+});
+
+exports.studentforgetlink = catchAyncErrors(async (req, res, next) => {
+    const student = await Students.findById(req.params.id).exec();
+    console.log(student);
+    if (student.resetPasswordToken === "1") {
+        student.resetPasswordToken = "0";
+        student.password = req.body.password;
+        await student.save();
+    } else {
+        return next(
+            new ErrorHandler(
+                "Invalid Reset Password Link! Please try again",
+                401
+            )
+        );
+    }
+    res.status(201).json({
+        message: "Password has been successfully changed",
+    });
 });
