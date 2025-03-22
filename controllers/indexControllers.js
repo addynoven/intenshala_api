@@ -50,7 +50,6 @@ exports.studentsendmail = catchAyncErrors(async (req, res, next) => {
     await student.save();
     console.log(url);
     sendMail(req, res, next, url);
-    // res.json({ student, url });
 });
 
 exports.studentforgetlink = catchAyncErrors(async (req, res, next) => {
@@ -71,4 +70,11 @@ exports.studentforgetlink = catchAyncErrors(async (req, res, next) => {
     res.status(201).json({
         message: "Password has been successfully changed",
     });
+});
+
+exports.studentresetpassword = catchAyncErrors(async (req, res, next) => {
+    const student = await Students.findById(req.id).exec();
+    student.password = req.body.password;
+    student.save();
+    sendtoken(student, 200, res);
 });
